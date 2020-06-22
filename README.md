@@ -116,7 +116,7 @@ Fetches media coverage given a isbn(as path variable)
 2. navigate to the project directory
 3. run command `mvn clean install`
 4. run command `docker build -t bookstore-springbootapp .`
-5. run command `docker-compose u`
+5. run command `docker-compose up`
 6. The service will be running on port 9000
 
 
