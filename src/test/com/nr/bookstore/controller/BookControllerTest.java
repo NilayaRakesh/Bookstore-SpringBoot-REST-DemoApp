@@ -1,5 +1,6 @@
 package com.nr.bookstore.controller;
 
+import com.nr.bookstore.constant.ErrorMessage;
 import com.nr.bookstore.exception.BadRequestException;
 import com.nr.bookstore.exception.InternalException;
 import com.nr.bookstore.model.api.AddBookRequest;
@@ -29,6 +30,7 @@ public class BookControllerTest extends TestCase {
     private static final Integer DUMMY_QUANTITY = 5;
     private static final Long DUMMY_CATALOG_ID = 1L;
     private static final Long DUMMY_SKU_ID = 1L;
+    private static final String EMPTY_STRING = "";
 
     @Mock
     private BookService bookService;
@@ -39,7 +41,7 @@ public class BookControllerTest extends TestCase {
     @Test
     public void testAddBookOk() {
         try {
-            AddBookRequest addBookRequest = mock(AddBookRequest.class);
+            AddBookRequest addBookRequest = getValidAddBookRequest();
             BookDto bookDto = new BookDto();
             bookDto.setCatalogItemId(DUMMY_CATALOG_ID);
             bookDto.setSkuId(DUMMY_SKU_ID);
@@ -65,9 +67,204 @@ public class BookControllerTest extends TestCase {
     }
 
     @Test
+    public void testAddBookNullIsbn() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setIsbn(null);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.ISBN_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookEmptyIsbn() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setIsbn(EMPTY_STRING);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.ISBN_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookNullTitle() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setTitle(null);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.TITLE_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookEmptyTitle() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setTitle(EMPTY_STRING);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.TITLE_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookNullAuthor() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setAuthor(null);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.AUTHOR_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookEmptyAuthor() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setAuthor(EMPTY_STRING);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.AUTHOR_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookNullPrice() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setPrice(null);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.PRICE_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookNullQuantity() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setQuantity(null);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.QUANTITY_REQUIRED, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookInvalidPrice() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setPrice(-1D);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.INVALID_PRICE, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookInvalidQuantity() {
+        try {
+            AddBookRequest addBookRequest = getValidAddBookRequest();
+            addBookRequest.getBook().setQuantity(-1);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.INVALID_QUANTITY, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookEmptyBook() {
+        try {
+            AddBookRequest addBookRequest = new AddBookRequest(null);
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.EMPTY_REQUEST, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testAddBookEmptyRequest() {
+        try {
+            ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(null);
+            fail();
+
+        } catch (BadRequestException e){
+            assertEquals(ErrorMessage.EMPTY_REQUEST, e.getMessage());
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
     public void testAddBookBadRequest() {
         try {
-            AddBookRequest addBookRequest = mock(AddBookRequest.class);
+            BookDto requestBookDto = new BookDto();
+            requestBookDto.setIsbn(DUMMY_ISBN);
+            requestBookDto.setTitle(DUMMY_TITLE);
+            requestBookDto.setAuthor(DUMMY_AUTHOR);
+            requestBookDto.setPrice(DUMMY_PRICE);
+            requestBookDto.setQuantity(DUMMY_QUANTITY);
+            AddBookRequest addBookRequest = new AddBookRequest(requestBookDto);
             doThrow(BadRequestException.class).when(bookService).insertBook(any());
 
             ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
@@ -84,7 +281,13 @@ public class BookControllerTest extends TestCase {
     @Test
     public void testAddBookInternalError() {
         try {
-            AddBookRequest addBookRequest = mock(AddBookRequest.class);
+            BookDto requestBookDto = new BookDto();
+            requestBookDto.setIsbn(DUMMY_ISBN);
+            requestBookDto.setTitle(DUMMY_TITLE);
+            requestBookDto.setAuthor(DUMMY_AUTHOR);
+            requestBookDto.setPrice(DUMMY_PRICE);
+            requestBookDto.setQuantity(DUMMY_QUANTITY);
+            AddBookRequest addBookRequest = new AddBookRequest(requestBookDto);
             doThrow(InternalException.class).when(bookService).insertBook(any());
 
             ResponseEntity<RestResponse<AddBookResponse>> response = cut.addBook(addBookRequest);
@@ -134,5 +337,15 @@ public class BookControllerTest extends TestCase {
         } catch (Exception e) {
             fail();
         }
+    }
+
+    private AddBookRequest getValidAddBookRequest() {
+        BookDto requestBookDto = new BookDto();
+        requestBookDto.setIsbn(DUMMY_ISBN);
+        requestBookDto.setTitle(DUMMY_TITLE);
+        requestBookDto.setAuthor(DUMMY_AUTHOR);
+        requestBookDto.setPrice(DUMMY_PRICE);
+        requestBookDto.setQuantity(DUMMY_QUANTITY);
+        return new AddBookRequest(requestBookDto);
     }
 }
