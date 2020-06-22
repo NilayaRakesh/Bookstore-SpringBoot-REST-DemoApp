@@ -14,7 +14,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class RestTemplateConfiguration {
+public class RestTemplateConfig {
 
     public static final int MAX_CONN_TOTAL = 100;
     public static final int MAX_CONN_PER_ROUTE = 20;
@@ -24,8 +24,8 @@ public class RestTemplateConfiguration {
     private String mediaCoverageHost;
 
     @Autowired
-    public RestTemplateConfiguration(RestTemplateBuilder restTemplateBuilder,
-                                     @Value("${host.mediaCoverage}") String mediaCoverageHost) {
+    public RestTemplateConfig(RestTemplateBuilder restTemplateBuilder,
+                              @Value("${host.mediaCoverage}") String mediaCoverageHost) {
         this.restTemplateBuilder = restTemplateBuilder;
         this.mediaCoverageHost = mediaCoverageHost;
     }
