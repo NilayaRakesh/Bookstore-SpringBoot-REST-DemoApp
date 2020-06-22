@@ -10,6 +10,7 @@ import com.nr.bookstore.model.api.CreatePurchaseResponse;
 import com.nr.bookstore.model.rds.CatalogItem;
 import com.nr.bookstore.model.rds.Purchase;
 import com.nr.bookstore.model.rds.Sku;
+import com.nr.bookstore.service.SkuService;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.verification.VerificationMode;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.mockito.Mockito.*;
@@ -31,6 +33,9 @@ public class PurchaseServiceImplTest extends TestCase {
 
     @Mock
     private PurchaseTransactionsManager purchaseTransactionsManager;
+
+    @Mock
+    private SkuService skuService;
 
     @InjectMocks
     private PurchaseServiceImpl cut;
@@ -52,6 +57,30 @@ public class PurchaseServiceImplTest extends TestCase {
             doReturn(dummyPurchase).when(purchaseTransactionsManager).createPurchase(any());
 
             CreatePurchaseResponse response = cut.createPurchase(createPurchaseRequest);
+            verify(skuService, times(0)).updateSku(anyLong(), any());
+            assertNotNull(response);
+            assertNotNull(response.getPurchase());
+            assertEquals(DUMMY_PRICE, response.getPurchase().getPrice());
+            assertEquals(DUMMY_QUANT, response.getPurchase().getQuantityBought());
+            assertEquals(DUMMY_SKU_ID, response.getPurchase().getSkuId());
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testCreatePurchaseQuantityDropZero() {
+        try {
+            Sku dummyUpdatedSku = new Sku(mock(CatalogItem.class), DUMMY_PRICE, 0);
+            dummyUpdatedSku.setSkuId(DUMMY_SKU_ID);
+
+            Purchase dummyPurchase = new Purchase(dummyUpdatedSku, DUMMY_PRICE, 1);
+            doReturn(dummyPurchase).when(purchaseTransactionsManager).createPurchase(any());
+
+            doReturn(mock(Sku.class)).when(skuService).updateSku(anyLong(), any());
+
+            CreatePurchaseResponse response = cut.createPurchase(createPurchaseRequest);
+            verify(skuService, times(1)).updateSku(anyLong(), any());
             assertNotNull(response);
             assertNotNull(response.getPurchase());
             assertEquals(DUMMY_PRICE, response.getPurchase().getPrice());

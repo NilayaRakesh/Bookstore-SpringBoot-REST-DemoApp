@@ -95,7 +95,7 @@ pageNumber and pageSize are mandatory parameters. pageNumber starts from 0.
 
 
 ##### Create Purchase
-Creates a purchase against a sku Id.
+Creates a purchase against a sku Id. If book count becomes 0, it adds 1 book to the DB.
 
 `curl --location --request POST 'localhost:9000/purchases' \
  --header 'Content-Type: application/json' \

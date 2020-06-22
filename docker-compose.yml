@@ -19,7 +19,6 @@ services:
 
   # ES
   es:
-#    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
     image: elasticsearch:7.6.2
     network_mode: bridge
     container_name: es

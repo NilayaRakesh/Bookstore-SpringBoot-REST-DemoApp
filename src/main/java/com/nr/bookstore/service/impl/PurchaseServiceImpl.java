@@ -9,8 +9,10 @@ import com.nr.bookstore.manager.PurchaseTransactionsManager;
 import com.nr.bookstore.model.api.CreatePurchaseRequest;
 import com.nr.bookstore.model.api.CreatePurchaseResponse;
 import com.nr.bookstore.model.dto.PurchaseDto;
+import com.nr.bookstore.model.dto.SkuDto;
 import com.nr.bookstore.model.rds.Purchase;
 import com.nr.bookstore.service.PurchaseService;
+import com.nr.bookstore.service.SkuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,10 +24,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     private static final Logger LOGGER = new Logger(PurchaseServiceImpl.class);
 
     private PurchaseTransactionsManager purchaseTransactionsManager;
+    private SkuService skuService;
 
     @Autowired
-    public PurchaseServiceImpl(PurchaseTransactionsManager purchaseTransactionsManager) {
+    public PurchaseServiceImpl(PurchaseTransactionsManager purchaseTransactionsManager, SkuService skuService) {
         this.purchaseTransactionsManager = purchaseTransactionsManager;
+        this.skuService = skuService;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase purchase;
         try {
             purchase = purchaseTransactionsManager.createPurchase(purchaseDtoBuilder.build());
+            addToSkuIfUpdatedQuantityZero(createPurchaseRequest.getSkuId(), purchase);
 
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Constraint violated while creating purchase", e);
@@ -53,5 +58,12 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .price(purchase.getSku().getPrice());
         return new CreatePurchaseResponse(purchaseDtoBuilder.build());
 
+    }
+
+    private void addToSkuIfUpdatedQuantityZero(Long skuId, Purchase purchase)
+            throws InternalException, BadRequestException, NotFoundException {
+        if (purchase.getSku().getQuantity() <= 0) {
+            skuService.updateSku(skuId, SkuDto.builder().quantity(1).build());
+        }
     }
 }
