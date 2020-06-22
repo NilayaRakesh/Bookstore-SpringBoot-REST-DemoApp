@@ -2,7 +2,7 @@
 
 ## Database Design
 
-####Entities/Tables - RDS: 
+#### Entities/Tables - RDS: 
 1. `CatalogItem`: any product in the bookstore is a catalogItem. Fields are `catalogItemId`(Primary Key, Auto generated Sequence),
 `createdAt`(Date), `updatedAt`(Date)
 
@@ -23,7 +23,7 @@ where same catalog item may have different prices/availabilities, the ability to
 problem.
 
 
-####Elastic Search:
+#### Elastic Search:
 Elastic search has been incorporated which stores the aggregated data for each product (book in this case) in a separate index.
 The aggregated data consists of `CatalogItem` details and details specific to the product as well as list of `Sku` objects.
 Quantity is excluded from the `Sku` objects since it is a highly dynamically changing value.
@@ -31,10 +31,10 @@ Quantity is excluded from the `Sku` objects since it is a highly dynamically cha
 Currently, this elastic search is being used to provide full text search over `title` and `author` of the book.
 
 
-##Code Structure
+## Code Structure
 The code follows a simple controller - service - manager/repository layered architecture.
 
-#####Controller Layer
+##### Controller Layer
 The response object of all controllers follow a defined structure 
 `{
      "code": 201,
@@ -48,11 +48,11 @@ The response object of all controllers follow a defined structure
  The Controller Advice takes care of different exceptions and maps it to a corresponding response.
  
  
- #####Service Layer
+ ##### Service Layer
  The requirements and business logic is defined in the service layer.
  
  
- #####Manager/Repository Layer
+ ##### Manager/Repository Layer
  This layer is responsible to handle and abstract out external interactions (with other APIs or database transactions) from
  the service layer.
  
