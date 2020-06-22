@@ -6,7 +6,7 @@
 1. `CatalogItem`: any product in the bookstore is a catalogItem. Fields are `catalogItemId`(Primary Key, Auto generated Sequence),
 `createdAt`(Date), `updatedAt`(Date)
 
-2. `Book`: fields which map to a specific isbn. Fields are `catalogItemId`(Primary Key, Foreign Key referencing CatalogItem), 
+2. `Book`: fields which map to a specific isbn(or book). Fields are `catalogItemId`(Primary Key, Foreign Key referencing CatalogItem), 
 `isbn`(String, unique, not null), `title`(String, not null), `author`(String not null)
 
 3. `Sku`: Sku stores stock and price data for a catalogItem. Fields are `skuId`(Primary Key, Auto generated Sequence), 
@@ -19,7 +19,7 @@ key referencing Sku), `purchasedQuantity`(integer, not null, >=0), `purchasePric
 
 This separation of catalog from book details and mapping of sku to catalogItem makes the design extensible if a new product 
 is added after books (with the only change being creation of a new table for product specific details).  Also, in the case
-where same catalog item may have different prices/availabilities, the ability to map of multiple skus to a single catalog can solve the
+where same catalog item may have different prices/availabilities, the ability to map multiple skus to a single catalog can solve the
 problem.
 
 
@@ -56,7 +56,17 @@ The response object of all controllers follow a defined structure
  This layer is responsible to handle and abstract out external interactions (with other APIs or database transactions) from
  the service layer.
  
+ 
+ ##### Other considerations
  Netflix `Hystrix` has been integrated as a circuit-breaker in case external APIs fail.
+ Custom wrapper classes for logging and REST template calls have been written to 
+ minimize code changes if in case use of another library is needed for these purposes
+ 
+ 
+ 
+ ##### Models
+ There are different models(POJOs) for the Database schema and the DTO structure which user sees. This is done to abstract out
+ the database design from the user and also to format the end response/request as per the user's need.
 
 
 ## REST APIs
@@ -99,6 +109,15 @@ Creates a purchase against a sku Id.
 Fetches media coverage given a isbn(as path variable)
 
 `curl --location --request GET 'localhost:9000/mediaCoverage/100000000'`
+
+
+## Running the Project
+1. Make sure you have `mvn` and `docker` set up
+2. navigate to the project directory
+3. run command `mvn clean install`
+4. run command `docker build -t bookstore-springbootapp .`
+5. run command `docker-compose u`
+6. The service will be running on port 9000
 
 
 
