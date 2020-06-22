@@ -73,42 +73,26 @@ The response object of all controllers follow a defined structure
 ##### Create Book
 Adds a new book to the bookstore
 
-`curl --location --request POST 'localhost:9000/books' \
- --header 'Content-Type: application/json' \
- --data-raw '{
-     "book": {
-         "isbn": "100000001",
-         "title": "Harry Potter and The Chamber of Secrets",
-         "author": "JK Rowling",
-         "price": 1000,
-         "quantity": 10
-     }
- }'`
+`curl --request POST 'localhost:9000/books'  --header 'Content-Type: application/json'  --data-raw '{ "book": { "isbn": "100000001", "title": "Harry Potter and The Chamber of Secrets", "author": "JK Rowling", "price": 1000, "quantity": 10 } }'`
 
 
 ##### Search Book
 Searches books on the basis of given filters. Title and Author searches allow for partial matches. Returns paginated results,
 pageNumber and pageSize are mandatory parameters. pageNumber starts from 0.
 
-`curl --location --request GET 'localhost:9000/books?pageNumber=0&pageSize=10&isbn=100000000&title=Harry&author=Rowling' \
- --data-raw ''`
+`curl --request GET 'localhost:9000/books?pageNumber=0&pageSize=10&isbn=100000000&title=Harry&author=Rowling' --data-raw ''`
 
 
 ##### Create Purchase
 Creates a purchase against a sku Id. If book count becomes 0, it adds 1 book to the DB.
 
-`curl --location --request POST 'localhost:9000/purchases' \
- --header 'Content-Type: application/json' \
- --data-raw '{
- 	"skuId": 1,
- 	"quantity": 5
- }'`
+`curl --request POST 'localhost:9000/purchases' --header 'Content-Type: application/json' --data-raw '{ "skuId": 1, "quantity": 5 }'`
 
 
 ##### Fetch Media Coverage
 Fetches media coverage given a isbn(as path variable)
 
-`curl --location --request GET 'localhost:9000/mediaCoverage/100000000'`
+`curl --request GET 'localhost:9000/mediaCoverage/100000000'`
 
 
 ## Running the Project
