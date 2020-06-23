@@ -15,9 +15,4 @@ public class BookstoreApp {
         ApplicationContext context = SpringApplication.run(BookstoreApp.class, args);
         System.out.println("Started Bookstore");
     }
-
-//    @Bean
-//    public RestTemplate getRestTemplate() {
-//        return new RestTemplate();
-//    }
 }

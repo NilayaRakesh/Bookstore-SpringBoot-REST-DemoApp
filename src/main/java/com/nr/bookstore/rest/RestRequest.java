@@ -20,9 +20,6 @@ class RestRequest {
         HttpHeaders headers;
         UriComponentsBuilder uriComponentsBuilder;
 
-        boolean disableEncoding = false;
-
-
         RestRequestBuilder(String httpHost) {
             headers = new HttpHeaders();
             uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(httpHost);

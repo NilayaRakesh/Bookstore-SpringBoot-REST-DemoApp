@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestControllerAdvice extends ResponseEntityExceptionHandler {
 
-
     @ExceptionHandler(value = {BadRequestException.class})
     public ResponseEntity handleBadRequest(BadRequestException e) {
         return new ResponseEntityBuilder<>(HttpStatus.BAD_REQUEST)

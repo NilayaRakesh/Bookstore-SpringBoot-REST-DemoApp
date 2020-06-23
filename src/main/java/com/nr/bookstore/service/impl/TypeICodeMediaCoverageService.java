@@ -1,8 +1,6 @@
 package com.nr.bookstore.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixException;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
-import com.netflix.hystrix.exception.HystrixTimeoutException;
 import com.nr.bookstore.exception.ExternalException;
 import com.nr.bookstore.exception.InternalException;
 import com.nr.bookstore.exception.NotFoundException;

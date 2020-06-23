@@ -16,9 +16,9 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
-    public static final int MAX_CONN_TOTAL = 100;
-    public static final int MAX_CONN_PER_ROUTE = 20;
-    public static final int MAX_CONN_MEDIA_COVERAGE = 10;
+    private static final int MAX_CONN_TOTAL = 100;
+    private static final int MAX_CONN_PER_ROUTE = 20;
+    private static final int MAX_CONN_MEDIA_COVERAGE = 10;
 
     private RestTemplateBuilder restTemplateBuilder;
     private String mediaCoverageHost;
@@ -39,20 +39,12 @@ public class RestTemplateConfig {
 
     public HttpComponentsClientHttpRequestFactory customHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory customFactory = new HttpComponentsClientHttpRequestFactory();
-//        customFactory.setConnectionRequestTimeout(3000);
-//        customFactory.setReadTimeout(40000);
-//        customFactory.setConnectTimeout(3000);
         customFactory.setHttpClient(closeableHttpClient());
         return customFactory;
     }
 
     @Bean
     public CloseableHttpClient closeableHttpClient() {
-//        RequestConfig config = RequestConfig.custom()
-//                .setConnectTimeout(3000)
-//                .setConnectionRequestTimeout(3000)
-//                .setSocketTimeout(180000).build();
-
         CloseableHttpClient client = HttpClientBuilder.create()
                 .setMaxConnTotal(MAX_CONN_TOTAL)
                 .setConnectionManager(getConnectionManager())

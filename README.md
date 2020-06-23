@@ -70,29 +70,223 @@ The response object of all controllers follow a defined structure
 
 
 ## REST APIs
-##### Create Book
+#### Create Book
 Adds a new book to the bookstore
 
 `curl --request POST 'localhost:9000/books'  --header 'Content-Type: application/json'  --data-raw '{ "book": { "isbn": "100000001", "title": "Dolorem", "author": "JK Rowling", "price": 1000, "quantity": 10 } }'`
 
+##### Response :
+`{
+    "code": 201,
+    "data": {
+        "bookDto": {
+            "catalogItemId": 3,
+            "skuId": 3,
+            "isbn": "100000000",
+            "title": "Dolorem",
+            "author": "JK Rowling",
+            "price": 1000.0,
+            "quantity": 10
+        }
+    },
+    "error": null
+}`
 
-##### Search Book
+`{
+     "code": 400,
+     "data": null,
+     "error": {
+         "code": 400,
+         "message": "Field isbn is requuired"
+     }
+ }`
+
+#### Search Book
 Searches books on the basis of given filters. Title and Author searches allow for partial matches. Returns paginated results,
 pageNumber and pageSize are mandatory parameters. pageNumber starts from 0.
 
 `curl --request GET 'localhost:9000/books?pageNumber=0&pageSize=10&isbn=100000001&title=Dolorem&author=Rowling' --data-raw ''`
 
+##### Response :
+`{
+     "code": 200,
+     "data": {
+         "books": [
+             {
+                 "catalogItemId": 3,
+                 "skuId": 3,
+                 "isbn": "100000000",
+                 "title": "Dolorem",
+                 "author": "JK Rowling",
+                 "price": 1000.0,
+                 "quantity": null
+             },
+             {
+                 "catalogItemId": 2,
+                 "skuId": 2,
+                 "isbn": "100000000",
+                 "title": "Dolorem",
+                 "author": "Latino",
+                 "price": 550.0,
+                 "quantity": null
+             }
+         ],
+         "totalCount": 2
+     },
+     "error": null
+ }`
 
-##### Create Purchase
+
+#### Create Purchase
 Creates a purchase against a sku Id. If book count becomes 0, it adds 1 book to the DB.
 
 `curl --request POST 'localhost:9000/purchases' --header 'Content-Type: application/json' --data-raw '{ "skuId": 1, "quantity": 5 }'`
 
+##### Response:
 
-##### Fetch Media Coverage
+`{
+     "code": 201,
+     "data": {
+         "purchase": {
+             "purchaseId": 6,
+             "skuId": 1,
+             "quantityBought": 1,
+             "price": 1000.0
+         }
+     },
+     "error": null
+ }`
+ 
+ `{
+      "code": 400,
+      "data": null,
+      "error": {
+          "code": 400,
+          "message": "Not enough stocks available"
+      }
+  }`
+
+#### Fetch Media Coverage
 Fetches media coverage given a isbn(as path variable)
 
 `curl --request GET 'localhost:9000/mediaCoverage/100000001'`
+
+##### Response:
+
+`{
+     "code": 200,
+     "data": [
+         {
+             "title": "eum et est occaecati"
+         },
+         {
+             "title": "dolorem eum magni eos aperiam quia"
+         },
+         {
+             "title": "dolorem dolore est ipsam"
+         },
+         {
+             "title": "nesciunt iure omnis dolorem tempora et accusantium"
+         },
+         {
+             "title": "in quibusdam tempore odit est dolorem"
+         },
+         {
+             "title": "dolorum ut in voluptas mollitia et saepe quo animi"
+         },
+         {
+             "title": "voluptatem eligendi optio"
+         },
+         {
+             "title": "asperiores ea ipsam voluptatibus modi minima quia sint"
+         },
+         {
+             "title": "maxime id vitae nihil numquam"
+         },
+         {
+             "title": "est et quae odit qui non"
+         },
+         {
+             "title": "doloremque illum aliquid sunt"
+         },
+         {
+             "title": "qui explicabo molestiae dolorem"
+         },
+         {
+             "title": "fuga nam accusamus voluptas reiciendis itaque"
+         },
+         {
+             "title": "eos dolorem iste accusantium est eaque quam"
+         },
+         {
+             "title": "commodi ullam sint et excepturi error explicabo praesentium voluptas"
+         },
+         {
+             "title": "ut numquam possimus omnis eius suscipit laudantium iure"
+         },
+         {
+             "title": "aut quo modi neque nostrum ducimus"
+         },
+         {
+             "title": "soluta aliquam aperiam consequatur illo quis voluptas"
+         },
+         {
+             "title": "sit asperiores ipsam eveniet odio non quia"
+         },
+         {
+             "title": "voluptatum itaque dolores nisi et quasi"
+         },
+         {
+             "title": "voluptas blanditiis repellendus animi ducimus error sapiente et suscipit"
+         },
+         {
+             "title": "aliquid eos sed fuga est maxime repellendus"
+         },
+         {
+             "title": "voluptatem laborum magni"
+         },
+         {
+             "title": "et iusto veniam et illum aut fuga"
+         },
+         {
+             "title": "enim unde ratione doloribus quas enim ut sit sapiente"
+         },
+         {
+             "title": "dignissimos eum dolor ut enim et delectus in"
+         },
+         {
+             "title": "doloremque officiis ad et non perferendis"
+         },
+         {
+             "title": "pariatur consequatur quia magnam autem omnis non amet"
+         },
+         {
+             "title": "labore in ex et explicabo corporis aut quas"
+         },
+         {
+             "title": "tempora rem veritatis voluptas quo dolores vero"
+         },
+         {
+             "title": "beatae soluta recusandae"
+         },
+         {
+             "title": "laboriosam dolor voluptates"
+         },
+         {
+             "title": "temporibus sit alias delectus eligendi possimus magni"
+         }
+     ],
+     "error": null
+ }`
+ 
+ `{
+      "code": 404,
+      "data": null,
+      "error": {
+          "code": 404,
+          "message": "Books not found"
+      }
+  }`
 
 
 ## Running the Project
