@@ -7,7 +7,6 @@ import com.nr.bookstore.model.dto.SkuDto;
 import com.nr.bookstore.model.rds.Book;
 import com.nr.bookstore.model.rds.Sku;
 import com.nr.bookstore.repository.BookRepository;
-import com.nr.bookstore.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

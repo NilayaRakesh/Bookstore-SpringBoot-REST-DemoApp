@@ -1,12 +1,10 @@
 package com.nr.bookstore.repository.elasticsearch;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nr.bookstore.log.Logger;
 import com.nr.bookstore.model.api.BookFilterRequest;
 import com.nr.bookstore.model.api.PaginationRequest;
 import com.nr.bookstore.model.elasticsearch.BookESDoc;
 import com.nr.bookstore.util.JsonUtil;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
